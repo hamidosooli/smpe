@@ -1,0 +1,82 @@
+# --- SMPE parameters for VMAS ---
+game: "vmas"
+action_selector: "soft_policies"
+mask_before_softmax: True
+
+mac: "basic_mac"
+agent: "rnn"
+
+use_cuda: False
+
+runner: "parallel"
+
+buffer_size: 10
+batch_size_run: 10
+batch_size: 10
+
+# update the target network every {} training steps
+target_update_interval_or_tau: 0.01
+target_update_filter: 50000
+period_filter_update: 2000
+update_filter_critic: 1
+stop_time_vae: 100000000000000
+
+obs_agent_id: True
+obs_last_action: False
+obs_individual_obs: False
+
+agent_output_type: "pi_logits"
+learner: "actor_critic_learner"
+entropy_coef: 0.01
+use_rnn: True
+standardise_returns: False
+standardise_rewards: True
+q_nstep: 5
+critic_type: "cv_critic"
+
+name: "smpe_vmas"
+
+use_dynamics: True
+use_w: True
+w_upd: True
+use_intrinsic: True
+use_z_inputs: True
+use_w_critic: True
+use_clip_weights: True
+
+clip_min: 0.3
+clip_max: 1
+
+hidden_dim: 128
+latent_dim: 32
+
+dynamics_controller: "vae_controller"
+lr: 0.0005
+lr_state_vae: 0.0005
+lr_agent_model: 0.0005
+lr_filter: 0.0005
+lr_w_critic: 0.00005
+
+state_epochs: 10
+agent_epochs: 15
+
+state_vae_batch_size: 15
+agent_vae_batch_size: 15
+
+state_vae_update_period: 2000
+agent_vae_update_period: 2000
+
+t_max: 10050000
+stop_train_state_vae: 550000000
+
+l2_lambda: 0.5
+lambda_rec: 0.1
+kl_prior_agents_lambda: 0.001
+lambda_kl_loss_state: 0.1
+lambda_kl_loss_obs: 0.1
+lambda_aux_loss: 1
+lambda_w_critic: 0.001
+z_rew_coeff: 0.1
+obs_rew_coeff: 0.
+true_rew_coeff: 1
+actions_loss_lambda: 0.0

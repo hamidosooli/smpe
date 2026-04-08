@@ -16,7 +16,10 @@ import pickle
 
 from run import run
 
-from gym.envs.registration import register as gym_register
+try:
+    from gym.envs.registration import register as gym_register
+except ImportError:
+    from gymnasium.envs.registration import register as gym_register
 
 try:
     from lbforaging.foraging.environment import ForagingEnv

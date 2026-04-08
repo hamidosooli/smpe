@@ -1,14 +1,20 @@
 from functools import partial
-import pretrained
 from smac.env import MultiAgentEnv, StarCraft2Env
 import sys
 import os
 import warnings
-import gym
-from gym import ObservationWrapper, spaces
-from gym.spaces import flatdim as gym_flatdim
 import numpy as np
-from gym.wrappers import TimeLimit as GymTimeLimit
+
+try:
+    import gym
+    from gym import ObservationWrapper, spaces
+    from gym.spaces import flatdim as gym_flatdim
+    from gym.wrappers import TimeLimit as GymTimeLimit
+except ImportError:
+    import gymnasium as gym
+    from gymnasium import ObservationWrapper, spaces
+    from gymnasium.spaces.utils import flatdim as gym_flatdim
+    from gymnasium.wrappers import TimeLimit as GymTimeLimit
 
 try:
     from gymnasium.spaces.utils import flatdim as gymnasium_flatdim
@@ -152,6 +158,7 @@ class _GymmaWrapper(MultiAgentEnv):
             self._env = gym.make(f"{key}", **make_kwargs)
 
         if pretrained_wrapper:
+            import pretrained
             self._env = getattr(pretrained, pretrained_wrapper)(self._env)
 
         self.n_agents = getattr(self._env, "n_agents", len(self._env.action_space))

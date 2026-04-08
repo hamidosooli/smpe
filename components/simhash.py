@@ -1,7 +1,6 @@
 import numpy as np
 import torch
 from collections.abc import MutableMapping
-from gym.spaces.utils import flatdim
 
 def flatten(d, parent_key='', sep='_'):
     items = []
