@@ -1,6 +1,7 @@
 import datetime
 import os
 import pprint
+import shutil
 import time
 import threading
 import torch as th
@@ -52,11 +53,22 @@ def run(_run, _config, _log):
         tb_exp_direc = os.path.join(tb_logs_direc, "{}").format(unique_token)
         logger.setup_tb(tb_exp_direc)
 
+    if args.use_wandb:
+        logger.setup_wandb(
+            _config,
+            args.wandb_team,
+            args.wandb_project,
+            args.wandb_mode,
+        )
+
     # sacred is on by default
     logger.setup_sacred(_run)
 
     # Run and train
     run_sequential(args=args, logger=logger)
+
+    # Finish logging
+    logger.finish()
 
     # Clean up after finishing
     print("Exiting Main")
@@ -283,6 +295,16 @@ def run_sequential(args, logger):
             # learner should handle saving/loading -- delegate actor save/load to mac,
             # use appropriate filenames to do critics, optimizer states
             learner.save_models(save_path)
+
+            if args.use_wandb and args.wandb_save_model:
+                wandb_save_dir = os.path.join(
+                    logger.wandb.dir, "models", args.unique_token, str(runner.t_env)
+                )
+                os.makedirs(wandb_save_dir, exist_ok=True)
+                for f in os.listdir(save_path):
+                    shutil.copyfile(
+                        os.path.join(save_path, f), os.path.join(wandb_save_dir, f)
+                    )
 
         # Augment with the number of parallel rans
         episode += args.batch_size_run

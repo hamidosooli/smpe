@@ -63,6 +63,17 @@ python3 main.py --config=smpe_vmas --env-config=gymma with env_args.time_limit=1
 python3 main.py --config=smpe_vmas --env-config=gymma with env_args.time_limit=150 env_args.key="vmas-wheel" env_args.n_agents=5
 ```
 
+#### W&B logging (single run)
+```bash
+python3 main.py --config=smpe_lbf --env-config=gymma with env_args.time_limit=50 env_args.key="Foraging-2s-9x9-3p-2f-coop-v2" use_wandb=True wandb_mode="online"
+```
+
+#### W&B sweep (multi-seed wrapper)
+```bash
+wandb sweep search.config.wandb.smpe_lbf.yaml
+SWEEP_NUM_SEEDS=3 wandb agent <entity>/<project>/<sweep_id>
+```
+
 
 If you are using SMPE in your research, please cite:
 ```
