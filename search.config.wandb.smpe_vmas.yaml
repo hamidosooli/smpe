@@ -1,0 +1,44 @@
+program: wandb_sweep_wrapper_multi_seed.py
+project: DeeperDiveIntoMACA
+method: random
+metric:
+  name: test_return_mean
+  goal: maximize
+
+parameters:
+  config:
+    value: smpe_vmas
+  env-config:
+    value: "gymma" 
+  env_args.time_limit:
+    value: 150 
+  env_args.key:
+    value: "vmas-balance"
+  env_args.n_agents:
+    value: 5
+  name:
+    value: smpe_vmas
+  use_wandb:
+    value: True
+  t_max: 
+    value: 1050000
+  hidden_dim: 
+    values: [64, 128]
+  lr: 
+    distribution: uniform
+    max: 0.001 
+    min: 0.0001
+  standardise_rewards: 
+    values: [True, False]
+  use_rnn: 
+    values: [True, False]
+  target_update_interval_or_tau: 
+    values: [200, 0.01]
+  entropy_coef: 
+    distribution: uniform
+    max: 0.01 
+    min: 0.001
+  q_nstep: 
+    values: [5, 10]
+  save_model: 
+    value: False
