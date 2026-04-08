@@ -1,0 +1,42 @@
+program: wandb_sweep_wrapper_multi_seed.py
+project: DeeperDiveIntoMACA
+method: random
+metric:
+  name: test_return_mean
+  goal: maximize
+
+parameters:
+  config:
+    value: smpe_lbf 
+  env-config:
+    value: "gymma" 
+  env_args.time_limit:
+    value: 50 
+  env_args.key:
+    value: "lbforaging:Foraging-15x15-3p-5f-v3"
+  name:
+    value: smpe_lbf
+  use_wandb:
+    value: True
+  t_max: 
+    value: 2000000
+  hidden_dim: 
+    values: [64, 128]
+  lr: 
+    distribution: uniform
+    max: 0.001 
+    min: 0.0001
+  standardise_rewards: 
+    values: [True, False]
+  use_rnn: 
+    values: [True, False]
+  target_update_interval_or_tau: 
+    values: [200, 0.01]
+  entropy_coef: 
+    distribution: uniform
+    max: 0.01 
+    min: 0.001
+  q_nstep: 
+    values: [5, 10]
+  save_model: 
+    value: False
