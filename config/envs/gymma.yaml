@@ -4,6 +4,12 @@ env_args:
   key: null
   time_limit: 100
   pretrained_wrapper: null
+  n_agents: null
+  line_length: null
+  line_mass: null
+  desired_velocity: null
+  package_mass: null
+  random_package_pos_on_line: null
 
 test_greedy: True
 test_nepisode: 100

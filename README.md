@@ -53,6 +53,16 @@ python3 main.py --config=smpe_mpe --env-config=gymma with env_args.time_limit=25
 python3 main.py --config=smpe_lbf --env-config=gymma with env_args.time_limit=500 env_args.key="rware:rware-tiny-4ag-hard-v1"
 ```
 
+#### VMAS command line (balance, 5 agents)
+```bash
+python3 main.py --config=smpe_vmas --env-config=gymma with env_args.time_limit=150 env_args.key="vmas-balance" env_args.n_agents=5
+```
+
+#### VMAS command line (wheel, 5 agents)
+```bash
+python3 main.py --config=smpe_vmas --env-config=gymma with env_args.time_limit=150 env_args.key="vmas-wheel" env_args.n_agents=5
+```
+
 
 If you are using SMPE in your research, please cite:
 ```

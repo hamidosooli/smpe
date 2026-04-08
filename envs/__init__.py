@@ -3,6 +3,7 @@ import pretrained
 from smac.env import MultiAgentEnv, StarCraft2Env
 import sys
 import os
+import warnings
 import gym
 from gym import ObservationWrapper, spaces
 from gym.spaces import flatdim as gym_flatdim
@@ -28,6 +29,13 @@ REGISTRY["sc2"] = partial(env_fn, env=StarCraft2Env)
 if sys.platform == "linux":
     os.environ.setdefault(
         "SC2PATH", os.path.join(os.getcwd(), "3rdparty", "StarCraftII")
+    )
+
+try:
+    from . import vmas_wrapper  # noqa: F401
+except ImportError:
+    warnings.warn(
+        "VMAS wrapper is unavailable. Install VMAS to use vmas-* tasks."
     )
 
 
@@ -134,10 +142,14 @@ class _GymmaWrapper(MultiAgentEnv):
         self.episode_limit = time_limit
         self._episode_steps = 0
 
+        make_kwargs = dict(kwargs)
+        self._seed = make_kwargs.pop("seed", None)
+        make_kwargs = {k: v for k, v in make_kwargs.items() if v is not None}
+
         try:
-            self._env = gym.make(f"{key}", disable_env_checker=True)
+            self._env = gym.make(f"{key}", disable_env_checker=True, **make_kwargs)
         except TypeError:
-            self._env = gym.make(f"{key}")
+            self._env = gym.make(f"{key}", **make_kwargs)
 
         if pretrained_wrapper:
             self._env = getattr(pretrained, pretrained_wrapper)(self._env)
@@ -151,7 +163,6 @@ class _GymmaWrapper(MultiAgentEnv):
         )
         self.longest_observation_dim = _space_flatdim(self.longest_observation_space)
 
-        self._seed = kwargs.get("seed")
         if self._seed is not None:
             try:
                 self._env.reset(seed=self._seed)
