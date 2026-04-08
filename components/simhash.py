@@ -1,13 +1,13 @@
 import numpy as np
 import torch
-import collections
+from collections.abc import MutableMapping
 from gym.spaces.utils import flatdim
 
 def flatten(d, parent_key='', sep='_'):
     items = []
     for k, v in d.items():
         new_key = parent_key + sep + k if parent_key else k
-        if isinstance(v, collections.MutableMapping):
+        if isinstance(v, MutableMapping):
             items.extend(flatten_dict(v, new_key, sep=sep).items())
         else:
             items.append((new_key, v))
@@ -76,7 +76,7 @@ class HashCount:
 
     def compute_keys(self, obss):
         binaries = np.sign(np.asarray(obss).dot(self.projection_matrix))
-        keys = np.cast["int"](binaries.dot(self.mods_list)) % self.bucket_sizes
+        keys = np.asarray(binaries.dot(self.mods_list), dtype=np.int64) % self.bucket_sizes
         return keys
 
     def inc_hash(self, obss):

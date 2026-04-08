@@ -1,7 +1,8 @@
 import numpy as np
 import os
 import random
-import collections
+import inspect
+from collections.abc import Mapping
 from os.path import dirname, abspath
 from copy import deepcopy
 from sacred import Experiment, SETTINGS
@@ -15,7 +16,38 @@ import pickle
 
 from run import run
 
-from gym.envs.registration import register
+from gym.envs.registration import register as gym_register
+
+try:
+    from lbforaging.foraging.environment import ForagingEnv
+
+    _FORAGING_INIT_PARAMS = set(inspect.signature(ForagingEnv.__init__).parameters)
+except Exception:
+    _FORAGING_INIT_PARAMS = set()
+
+
+def _adapt_foraging_kwargs(kwargs):
+    if not _FORAGING_INIT_PARAMS:
+        return kwargs
+
+    adapted = dict(kwargs)
+    if "max_food" in adapted and "max_num_food" in _FORAGING_INIT_PARAMS:
+        max_food = adapted.pop("max_food")
+        adapted["max_num_food"] = max_food
+        adapted["min_food_level"] = 1
+        adapted["max_food_level"] = None
+        adapted["min_player_level"] = 1
+
+    if "max_num_food" in adapted and "max_food" in _FORAGING_INIT_PARAMS:
+        adapted.setdefault("max_food", adapted["max_num_food"])
+
+    return {k: v for k, v in adapted.items() if k in _FORAGING_INIT_PARAMS}
+
+
+def register(id, entry_point, kwargs):
+    if entry_point == "lbforaging.foraging:ForagingEnv":
+        kwargs = _adapt_foraging_kwargs(kwargs)
+    gym_register(id=id, entry_point=entry_point, kwargs=kwargs)
 
 
 register(
@@ -790,7 +822,7 @@ def _get_config(params, arg_name, subfolder):
 
 def recursive_dict_update(d, u):
     for k, v in u.items():
-        if isinstance(v, collections.Mapping):
+        if isinstance(v, Mapping):
             d[k] = recursive_dict_update(d.get(k, {}), v)
         else:
             d[k] = v
@@ -852,4 +884,3 @@ if __name__ == '__main__':
     # ex.observers.append(MongoObserver())
 
     ex.run_commandline(params)
-
