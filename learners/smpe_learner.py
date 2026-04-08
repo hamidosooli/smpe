@@ -9,7 +9,7 @@ from modules.critics import REGISTRY as critic_resigtry, CentralQCritic, Central
 from model_learners import REGISTRY as mle_REGISTRY
 from components.standarize_stream import RunningMeanStd
 
-class ActorCriticVLearner:
+class SMPELearner:
     def __init__(self, mac, scheme, logger, args, mle_learner=None):
         self.args = args
         self.n_agents = args.n_agents

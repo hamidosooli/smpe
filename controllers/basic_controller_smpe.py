@@ -5,7 +5,7 @@ import torch as th
 
 
 # This multi-agent controller shares parameters between agents
-class BasicMAC:
+class BasicMACSMPE:
     def __init__(self, scheme, groups, args, vae_controller=None):
         self.n_agents = args.n_agents
         self.args = args

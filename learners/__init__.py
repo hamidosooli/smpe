@@ -1,5 +1,5 @@
-from .actor_critic_learner import ActorCriticVLearner
+from .smpe_learner import SMPELearner
 
 REGISTRY = {}
 
-REGISTRY["actor_critic_learner"] = ActorCriticVLearner
+REGISTRY["smpe_learner"] = SMPELearner

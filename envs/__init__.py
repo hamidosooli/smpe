@@ -16,8 +16,8 @@ def env_fn(env, **kwargs) -> MultiAgentEnv:
 
 REGISTRY = {}
 REGISTRY["sc2"] = partial(env_fn, env=StarCraft2Env)
-from .traffic_junction import Traffic_JunctionEnv
-REGISTRY["traffic_junction"] = partial(env_fn, env=Traffic_JunctionEnv)
+# from .traffic_junction import Traffic_JunctionEnv
+# REGISTRY["traffic_junction"] = partial(env_fn, env=Traffic_JunctionEnv)
 
 if sys.platform == "linux":
     os.environ.setdefault(
