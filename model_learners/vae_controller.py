@@ -12,6 +12,7 @@ import numpy as np
 from operator import itemgetter 
 import gc
 import time
+import os
 
 
 class VAEController:
@@ -389,6 +390,9 @@ class VAEController:
     def save_models(self, t_env, path=None):
         if path is None:
             path = "saves/ed_" + str(t_env) + ".pth"
+        parent_dir = os.path.dirname(path)
+        if parent_dir:
+            os.makedirs(parent_dir, exist_ok=True)
         th.save(self.agent_models.state_dict(), path)
         return
 
@@ -402,6 +406,9 @@ class VAEController:
     def save_filters(self, t_env, path=None):
         if path is None:
             path = "saves/filters_" + str(t_env) + ".pth"
+        parent_dir = os.path.dirname(path)
+        if parent_dir:
+            os.makedirs(parent_dir, exist_ok=True)
         th.save(self.filters.state_dict(), path)
         return
 
