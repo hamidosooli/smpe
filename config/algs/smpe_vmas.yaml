@@ -1,10 +1,10 @@
-# --- SMPE parameters for VMAS ---
+# --- Central-V specific parameters ---
 game: "vmas"
 action_selector: "soft_policies"
 mask_before_softmax: True
 
 mac: "basic_mac"
-agent: "rnn"
+agent: "rnn_ns"       # SL: rnn, spread: rnn_ns
 
 use_cuda: False
 
@@ -14,48 +14,52 @@ buffer_size: 10
 batch_size_run: 10
 batch_size: 10
 
+# env_args:
+
+#   state_last_action: False # critic adds last action internally
+
 # update the target network every {} training steps
 target_update_interval_or_tau: 0.01
-target_update_filter: 50000
-period_filter_update: 2000
-update_filter_critic: 1
+target_update_filter: 150000  # 150000
+period_filter_update: 20000   # 20000   50000
+update_filter_critic: 1      # 200000
 stop_time_vae: 100000000000000
+lr: 0.0005
 
 obs_agent_id: True
 obs_last_action: False
 obs_individual_obs: False
 
 agent_output_type: "pi_logits"
-learner: "actor_critic_learner"
+learner: "smpe_learner"
 entropy_coef: 0.01
 use_rnn: True
 standardise_returns: False
 standardise_rewards: True
-q_nstep: 5
+q_nstep: 5    # 1 corresponds to normal r + gamma * V
 critic_type: "cv_critic"
 
 name: "smpe_vmas"
 
 use_dynamics: True
 use_w: True
-w_upd: True
-use_intrinsic: True
-use_z_inputs: True
 use_w_critic: True
+use_intrinsic: False
+use_z_inputs: True
 use_clip_weights: True
+use_2layer_filter: True
 
-clip_min: 0.3
+clip_min: 0.1   # 0.1
 clip_max: 1
 
 hidden_dim: 128
-latent_dim: 32
+latent_dim: 64
 
 dynamics_controller: "vae_controller"
-lr: 0.0005
 lr_state_vae: 0.0005
 lr_agent_model: 0.0005
-lr_filter: 0.0005
-lr_w_critic: 0.00005
+lr_filter: 0.0005     # 0.00001
+lr_w_critic: 0.0000005     # 0.00001    0.0000005
 
 state_epochs: 10
 agent_epochs: 15
@@ -66,17 +70,15 @@ agent_vae_batch_size: 15
 state_vae_update_period: 2000
 agent_vae_update_period: 2000
 
-t_max: 10050000
+t_max: 10050000                         # 10050000 (spread-5)
 stop_train_state_vae: 550000000
 
-l2_lambda: 0.5
-lambda_rec: 0.1
+l2_lambda: 0.1  # 0.1
+lambda_rec: 1
 kl_prior_agents_lambda: 0.001
 lambda_kl_loss_state: 0.1
 lambda_kl_loss_obs: 0.1
 lambda_aux_loss: 1
 lambda_w_critic: 0.001
-z_rew_coeff: 0.1
+z_rew_coeff: 0.0
 obs_rew_coeff: 0.
-true_rew_coeff: 1
-actions_loss_lambda: 0.0
