@@ -27,11 +27,11 @@ obs_individual_obs: False
 
 agent_output_type: "pi_logits"
 learner: "actor_critic_learner"
-entropy_coef: 0.01
-use_rnn: True
+entropy_coef: 0.0087
+use_rnn: False
 standardise_returns: False
 standardise_rewards: True  
-q_nstep: 5    # 1 corresponds to normal r + gamma * V
+q_nstep: 10    # 1 corresponds to normal r + gamma * V
 critic_type: "cv_critic"
 
 name: "smpe"
@@ -51,7 +51,7 @@ hidden_dim: 128
 latent_dim: 32    
 
 dynamics_controller: "vae_controller"
-lr: 0.0005
+lr: 0.00071
 lr_state_vae: 0.0005
 lr_agent_model: 0.0005
 lr_filter: 0.0005
@@ -66,7 +66,7 @@ agent_vae_batch_size: 15
 state_vae_update_period: 2000   
 agent_vae_update_period: 2000   
                 
-t_max: 10050000                        
+t_max: 20050000                        
 stop_train_state_vae: 550000000
 
 l2_lambda: 0.5              # 0.01 for 2s-11x11-3p-2f , 1 otherwise
