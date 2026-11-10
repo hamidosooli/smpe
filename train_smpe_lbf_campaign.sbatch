@@ -17,7 +17,7 @@ cd "${SCRIPT_DIR}"
 module load anaconda3/2024.10
 source /sw/apps/anaconda3/2024.10/bin/activate /projects/illinois/eng/aero/huytran1/niketnp2/conda/dissc
 
-export WANDB_API_KEY=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
+export WANDB_API_KEY=<key>
 wandb login
 
 ALGS=(
